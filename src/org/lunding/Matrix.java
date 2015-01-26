@@ -13,7 +13,4 @@ public interface Matrix {
     public Matrix minus(Matrix b);
     public Matrix times(Matrix b);
     public Matrix solve(Matrix b);
-
-    public boolean equal();
-
 }
