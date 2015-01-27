@@ -1,6 +1,7 @@
 package org.lunding;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -238,4 +239,134 @@ public class TestMatrix {
                 "= (0 0 0) (0 0 0) (0 0 0)", result, a.minus(b));
     }
 
+    /**
+     **************************** Times ****************************
+     */
+
+    @Test
+    public void testTimes1Fail(){
+        double[][] bData = {
+                {1.0, 2.0},
+                {3.0, 4.0},
+                {5.0, 6.0}};
+        Matrix b = new MatrixImpl(bData);
+        illegalArgument.expect(IllegalArgumentException.class);
+        a.times(b);
+    }
+
+    @Test
+    public void testTimes2Fail(){
+        double[][] bData = {
+                {1.0, 2.0, 3.0},
+                {3.0, 4.0, 5.0}};
+        Matrix b = new MatrixImpl(bData);
+        illegalArgument.expect(IllegalArgumentException.class);
+        b.times(a);
+    }
+
+    @Test
+    public void testTimes1(){
+        double[][] bData = {
+                {4.0, 5.0},
+                {6.0, 7.0}};
+        Matrix b = new MatrixImpl(bData);
+        double[][] resultData = {
+                {16.0, 19.0},
+                {36.0, 43.0}};
+        Matrix result = new MatrixImpl(resultData);
+        assertEquals("(1 2) (3 4) * (4 5) (6 7) = (16 19) (36 43)", result, a.times(b));
+    }
+
+    @Test
+    public void testTimes2(){
+        double[][] aData = {
+                {3.0, 4.0, 2.0}};
+        Matrix a = new MatrixImpl(aData);
+        double[][] bData = {
+                {13.0, 9.0, 7.0, 15.0},
+                {8.0, 7.0, 4.0, 6.0},
+                {6.0, 4.0, 0.0, 3.0}};
+        Matrix b = new MatrixImpl(bData);
+        double[][] resultData = {
+                {83.0, 63.0, 37.0, 75.0}};
+        Matrix result = new MatrixImpl(resultData);
+        assertEquals("(3 4 2) * (13 9 7 15) (8 7 4 6) (6 4 0 3) = (83 63 37 75)", result, a.times(b));
+    }
+
+    @Test
+    public void testTimes3(){
+        double[][] aData = {
+                {1.0, 2.0, 3.0},
+                {4.0, 5.0, 6.0}};
+        Matrix a = new MatrixImpl(aData);
+        double[][] bData = {
+                {7.0, 8.0},
+                {9.0, 10.0},
+                {11.0, 12.0}};
+        Matrix b = new MatrixImpl(bData);
+        double[][] resultData = {
+                {58, 64},
+                {139, 154}};
+        Matrix result = new MatrixImpl(resultData);
+        assertEquals("(1 2 3) (4 5 6) * (7 8) (9 10) (11 12) " +
+                "= (58 64) (139 154)", result, a.times(b));
+    }
+
+    /**
+     **************************** Solve ****************************
+     */
+    @Test
+    public void testSolve1Fail(){
+        double[][] bData = {
+                {1.0, 2.0},
+                {3.0, 4.0},
+                {5.0, 6.0}};
+        Matrix b = new MatrixImpl(bData);
+        illegalArgument.expect(IllegalArgumentException.class);
+        a.solve(b);
+    }
+
+    @Test
+    public void testSolve2Fail(){
+        double[][] bData = {
+                {1.0, 2.0},
+                {3.0, 4.0}};
+        Matrix b = new MatrixImpl(bData);
+        illegalArgument.expect(IllegalArgumentException.class);
+        a.solve(b);
+    }
+
+    @Test
+    public void testSolve1(){
+        double[][] bData = {
+                {-4.0},
+                {-6.0}};
+        Matrix b = new MatrixImpl(bData);
+        double[][] resultData = {
+                {2},
+                {-3}};
+        Matrix result = new MatrixImpl(resultData);
+        assertEquals("(1 2) (3 4) | (-4 -6) = (1 0) (1 0) | (2 - 3)", result, a.solve(b));
+    }
+
+    @Test
+    public void testSolve2() {
+        double[][] aData = {
+                {2.0, 1.0, -1.0},
+                {-3.0, -1.0, 2.0},
+                {-2.0, 1.0, 2.0}};
+        Matrix a = new MatrixImpl(aData);
+        double[][] bData = {
+                {8.0},
+                {-11.0},
+                {-3.0}};
+        Matrix b = new MatrixImpl(bData);
+
+        double[][] resultData = {
+                {2.0},
+                {3.0},
+                {-1.0}};
+        Matrix result = new MatrixImpl(resultData);
+        assertEquals("(2 1 -1) (-3 -1 2) (-2 1 2) | (8 -11 -3) = (2 3 -1)", result, a.solve(b));
+    }
 }

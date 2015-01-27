@@ -8,7 +8,6 @@ public interface Matrix {
     public Matrix identity(int n);
     public Matrix transpose();
     public Matrix inverse();
-    public Matrix show();
     public Matrix plus(Matrix b);
     public Matrix minus(Matrix b);
     public Matrix times(Matrix b);
@@ -16,4 +15,5 @@ public interface Matrix {
     public int getRows();
     public int getColumns();
     public double getData(int row, int column);
+    public Matrix clone();
 }
