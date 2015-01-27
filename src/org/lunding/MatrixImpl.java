@@ -1,5 +1,7 @@
 package org.lunding;
 
+import java.util.Arrays;
+
 /**
  * Created by Lunding on 26/01/15.
  */
@@ -32,7 +34,13 @@ public class MatrixImpl implements Matrix{
 
     @Override
     public Matrix transpose() {
-        return null;
+        MatrixImpl m = new MatrixImpl(columns, rows);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                m.data[j][i] = this.data[i][j];
+            }
+        }
+        return m;
     }
 
     @Override
@@ -47,12 +55,30 @@ public class MatrixImpl implements Matrix{
 
     @Override
     public Matrix plus(Matrix b) {
-        return null;
+        if (this.rows != b.getRows() || this.columns != b.getColumns()) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
+        }
+        MatrixImpl c = new MatrixImpl(rows, columns);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                c.data[i][j] = this.data[i][j] + b.getData(i, j);
+            }
+        }
+        return c;
     }
 
     @Override
     public Matrix minus(Matrix b) {
-        return null;
+        if (this.rows != b.getRows() || this.columns != b.getColumns()) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
+        }
+        MatrixImpl c = new MatrixImpl(rows, columns);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                c.data[i][j] = this.data[i][j] - b.getData(i, j);
+            }
+        }
+        return c;
     }
 
     @Override
@@ -63,6 +89,21 @@ public class MatrixImpl implements Matrix{
     @Override
     public Matrix solve(Matrix b) {
         return null;
+    }
+
+    @Override
+    public int getRows() {
+        return rows;
+    }
+
+    @Override
+    public int getColumns() {
+        return columns;
+    }
+
+    @Override
+    public double getData(int row, int column) {
+        return this.data[row][column];
     }
 
     @Override
@@ -88,6 +129,18 @@ public class MatrixImpl implements Matrix{
     public int hashCode() {
         int result = rows;
         result = 31 * result + columns;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        for (int i = 0; i < rows; i++){
+            for (int j = 0; j < columns; j++){
+                result += data[i][j] + " ";
+            }
+            result += "\n";
+        }
         return result;
     }
 }

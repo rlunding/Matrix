@@ -1,5 +1,4 @@
-<project name="HotCiv" default="help" basedir="."
-         xmlns:jacoco="antlib:org.jacoco.ant">
+<project name="HotCiv" default="help" basedir=".">
 
     <property name="source-directory" value="src"/>
     <property name="test-source-directory" value="test"/>
@@ -38,7 +37,6 @@
             test:        Run JUnit test cases.
 
             test.batch:  Run JUnit test cases with output in TEST-RESULT
-            coverage:    Run JUnit tests and generate code coverage report
             =====
         </echo>
     </target>
@@ -84,7 +82,7 @@
 
     <target name="javadoc" depends="clean,build-src,mkdirdoc">
         <javadoc
-                source = "1.5"
+                source = "1.7"
                 packagenames="org.lunding.*"
                 sourcepath="${source-directory}"
                 destdir="${doc-directory}"
@@ -122,44 +120,4 @@
             <classpath refid="class-path"/>
         </junit>
     </target>
-
-
-    <!-- Run JUnit with JaCoCo code coverage -->
-    <target name="run.junit" depends="build-all">
-        <jacoco:coverage destfile="${jacoco.exec}" >
-            <junit printsummary="yes" fork="yes"
-                   forkmode="once"
-                   haltonfailure="yes">
-                <formatter type="plain"/>
-                <batchtest fork="yes" todir="${test-output-directory}">
-                    <fileset dir="test">
-                        <include name="**/*Test*.java"/>
-                    </fileset>
-                </batchtest>
-                <classpath refid="class-path"/>
-            </junit>
-        </jacoco:coverage>
-    </target>
-
-    <target name="coverage" depends="run.junit"
-            description="--> Generate code coverage report in the report dir">
-        <jacoco:report>
-            <executiondata>
-                <file file="${jacoco.exec}"/>
-            </executiondata>
-            <structure name="Matrix Test" >
-                <classfiles>
-                    <fileset dir="${build-directory}">
-                        <include name="**/*.class"/>
-                    </fileset>
-                </classfiles>
-                <sourcefiles encoding="UTF-8" tabwidth="2">
-                    <fileset dir="${source-directory}"/>
-                </sourcefiles>
-            </structure>
-            <html destdir="${jacoco.report.dir}"/>
-        </jacoco:report>
-        <echo message="To see report, browse to index.html at ${jacoco.report.dir}."/>
-    </target>
-
 </project>
