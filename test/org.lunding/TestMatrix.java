@@ -313,6 +313,27 @@ public class TestMatrix {
     }
 
     /**
+     **************************** Times scalar *********************
+     */
+    @Test
+    public void testTimesScalar1(){
+        double[][] resultData = {
+                {3.0, 6.0},
+                {9.0, 12.0}};
+        Matrix result = new MatrixImpl(resultData);
+        assertEquals("3 (1 2) (3 4) = (3 6) (9 12)\"", result, a.times(3));
+    }
+
+    @Test
+    public void testTimesScalar2(){
+        double[][] resultData = {
+                {0.0, 0.0},
+                {0.0, 0.0}};
+        Matrix result = new MatrixImpl(resultData);
+        assertEquals("0 (1 2) (3 4) = (0 0) (0 0)", result, a.times(0));
+    }
+
+    /**
      **************************** Solve ****************************
      */
     @Test
@@ -368,5 +389,65 @@ public class TestMatrix {
                 {-1.0}};
         Matrix result = new MatrixImpl(resultData);
         assertEquals("(2 1 -1) (-3 -1 2) (-2 1 2) | (8 -11 -3) = (2 3 -1)", result, a.solve(b));
+    }
+
+    /**
+     **************************** Inverse ****************************
+     */
+    @Test
+    @Ignore
+    public void testInverse(){
+        double[][] resultData = {
+                {1.0, 2.0},
+                {3.0, 4.0}};
+        Matrix result = new MatrixImpl(resultData);
+        assertEquals("Inverse of () should be ()", result, a.inverse());
+    }
+
+    /**
+     **************************** Determinant ****************************
+     */
+    @Test
+    public void testDeterminant1(){
+        double[][] aData = {
+                {1.0}};
+        Matrix a = new MatrixImpl(aData);
+        assertEquals("Determinant should be 1", 1, a.determinant(), 0.0005);
+    }
+
+    @Test
+    public void testDeterminant2(){
+        assertEquals("Determinant should be -2", -2, a.determinant(), 0.0005);
+    }
+
+    @Test
+    public void testDeterminant3(){
+        double[][] aData = {
+                {6.0, 1.0, 1.0},
+                {4.0, -2.0, 5.0},
+                {2.0, 8.0, 7.0}};
+        Matrix a = new MatrixImpl(aData);
+        assertEquals("Determinant should be 1", -306, a.determinant(), 0.0005);
+    }
+
+    @Test
+    public void testDeterminant4(){
+        double[][] aData = {
+                {3.0, 1.0, 8.0},
+                {6.0, 3.0, 0.0},
+                {6.0, 8.0, 8.0}};
+        Matrix a = new MatrixImpl(aData);
+        assertEquals("Determinant should be 265", 264, a.determinant(), 0.0005);
+    }
+
+    @Test
+    public void testDeterminant5(){
+        double[][] aData = {
+                {1.0, 2.0, -1.0, 0.0},
+                {0.0, 5.0, 3.0, 0.0},
+                {-2.0, 0.0, 0.0, 4.0},
+                {0.0, 6.0, -4.0, -3.0}};
+        Matrix a = new MatrixImpl(aData);
+        assertEquals("Determinant should be 218", 218, a.determinant(), 0.0005);
     }
 }

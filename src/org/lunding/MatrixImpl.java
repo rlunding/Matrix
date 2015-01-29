@@ -1,14 +1,14 @@
 package org.lunding;
 
-import com.sun.istack.internal.NotNull;
 
-import java.util.Arrays;
 
 /**
+ * Implementation of the Matrix interface.
  * Created by Lunding on 26/01/15.
  */
 public class MatrixImpl implements Matrix, Cloneable{
 
+    private static final int ROUND_PARAMETER = 1000;
     private final double[][] data;
     private final int rows;
     private final int columns;
@@ -95,6 +95,17 @@ public class MatrixImpl implements Matrix, Cloneable{
     }
 
     @Override
+    public Matrix times(double scalar) {
+        MatrixImpl result = new MatrixImpl(rows, columns);
+        for (int i = 0; i < result.rows; i++) {
+            for (int j = 0; j < result.columns; j++) {
+                result.data[i][j] = data[i][j] * scalar;
+            }
+        }
+        return result;
+    }
+
+    @Override
     public Matrix solve(Matrix input) {
         if (input == null){
             throw new IllegalArgumentException("input b, must not be null");
@@ -147,14 +158,51 @@ public class MatrixImpl implements Matrix, Cloneable{
         return x;
     }
 
-    private double round(double a){
-        return Math.round(a * 1000.0) / 1000.0;
-    }
-
     private void swap(int i, int j){
         double[] temp = data[i];
         data[i] = data[j];
         data[j] = temp;
+    }
+
+    private double round(double a){
+        return Math.round(a * ROUND_PARAMETER) / ROUND_PARAMETER;
+    }
+
+    @Override
+    public double determinant() {
+        if (rows != columns) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
+        }
+        return determinant(data.clone(), rows);
+    }
+
+    private double determinant(double[][] a, int n){
+        if(n == 1) {
+            return  a[0][0];
+        }
+        if (n == 2) {
+            return a[0][0]*a[1][1] - a[1][0]*a[0][1];
+        }
+        double det = 0;
+        for(int i = 0; i < n; i++) {
+
+            double[][] m = new double[n-1][];
+            for(int k = 0; k < (n-1); k++) {
+                m[k] = new double[n-1];
+            }
+            for(int j = 1; j < n; j++) {
+                int j2=0;
+                for(int k = 0; k < n; k++) {
+                    if(k == i){
+                        continue;
+                    }
+                    m[j - 1][j2] = a[j][k];
+                    j2++;
+                }
+            }
+            det += Math.pow(-1.0, 1.0 + i + 1.0) * a[0][i] * determinant(m, n-1);
+        }
+        return det;
     }
 
     @Override
@@ -187,7 +235,6 @@ public class MatrixImpl implements Matrix, Cloneable{
                 }
             }
         }
-
         return true;
     }
 
@@ -211,8 +258,7 @@ public class MatrixImpl implements Matrix, Cloneable{
     }
 
     @Override
-    public Matrix clone() {
-        MatrixImpl result = new MatrixImpl(data.clone());
-        return result;
+    public Matrix clone(){
+        return new MatrixImpl(data.clone());
     }
 }
